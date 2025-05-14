@@ -1,0 +1,4 @@
+node:
+  serviceAccount:
+    annotations:
+      "eks.amazonaws.com/role-arn": "arn:aws:iam::account:role/csi-driver-role-name"
