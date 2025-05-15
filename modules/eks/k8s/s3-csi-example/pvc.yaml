@@ -2,11 +2,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: s3-pvc
+  namespace: demo
 spec:
   accessModes:
     - ReadWriteMany # Supported options: ReadWriteMany / ReadOnlyMany
   storageClassName: "" # Required for static provisioning
   resources:
     requests:
-      storage: 100Gi # Ignored, required
+      storage: 20Gi # Ignored, required
   volumeName: s3-pv # Name of your PV

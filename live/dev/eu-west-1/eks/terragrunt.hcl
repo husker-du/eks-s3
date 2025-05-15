@@ -39,7 +39,7 @@ dependency "vpc" {
 dependency "s3" {
   config_path = "../s3"
   mock_outputs = {
-    bucket_arn  = "arn:aws:s3:::s3_bucket_mock123"
+    bucket_arn = "arn:aws:s3:::s3_bucket_mock123"
   }
 }
 
@@ -53,7 +53,7 @@ inputs = {
   intra_subnet_ids   = dependency.vpc.outputs.intra_subnet_ids
 
   # S3 dependencies
-  s3_csi_bucket_arn  = dependency.s3.outputs.bucket_arn
+  s3_csi_bucket_arn = dependency.s3.outputs.bucket_arn
 
   # EKS cluster
   cluster_version                          = "1.32"

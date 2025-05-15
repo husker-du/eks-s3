@@ -17,6 +17,9 @@ locals {
 }
 
 inputs = {
+  # EKS cluster
+  enable_irsa = true
+
   # Karpenter
   karpenter_version    = "1.3.3"
   karpenter_wait       = false

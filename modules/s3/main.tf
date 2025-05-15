@@ -7,7 +7,7 @@ module "s3_csi_context" {
 }
 
 module "s3_csi_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
+  source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.8.0"
 
   bucket        = module.s3_csi_context.id

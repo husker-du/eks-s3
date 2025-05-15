@@ -27,6 +27,16 @@ variable "s3_csi_bucket_arn" {
   type        = string
 }
 
+variable "aws_key_id" {
+  description = "The AWS credentials key id for the CSI driver authentication"
+  type        = string
+}
+
+variable "aws_access_key" {
+  description = "The AWS credentials access key for the CSI driver authentication"
+  type        = string
+}
+
 #############################################################
 # EKS variables
 #############################################################
@@ -80,6 +90,12 @@ variable "system_pool_config" {
     max_size       = 3
     desired_size   = 2
   }
+}
+
+variable "enable_irsa" {
+  description = "Determines whether to create an OpenID Connect Provider for EKS to enable IRSA"
+  type        = bool
+  default     = true
 }
 
 #############################################################
@@ -179,6 +195,18 @@ variable "s3_csi_version" {
   description = "Version number for mountpoint for S3 CSI driver helm chart"
   type        = string
   default     = "v1.14.1"
+}
+
+variable "s3_csi_service_account" {
+  description = "The service account name of the mountpoint S3 CSI driver"
+  type        = string
+  default     = "s3-csi-driver-sa"
+}
+
+variable "s3_csi_secret_name" {
+  description = ""
+  type        = string
+  default     = "aws-secret"
 }
 
 #############################################################

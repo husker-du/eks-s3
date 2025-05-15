@@ -1,4 +1,6 @@
 node:
   serviceAccount:
     annotations:
-      "eks.amazonaws.com/role-arn": "arn:aws:iam::${accountId}:role/csi-driver-role-name"
+      "eks.amazonaws.com/role-arn": "${csi_driver_role_arn}"
+awsAccessSecret:
+  name: aws-secret

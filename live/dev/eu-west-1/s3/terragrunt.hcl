@@ -32,6 +32,6 @@ terraform {
 # For production, we want to specify bigger instance classes and storage, so we specify override parameters here. These
 # inputs get merged with the common inputs from the root and the envcommon terragrunt.hcl
 inputs = {
-  acl = "null"
+  acl                = "null"
   versioning_enabled = true
 }

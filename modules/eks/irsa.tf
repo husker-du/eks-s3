@@ -3,7 +3,7 @@ module "iam_s3_rw_context" {
   version = "0.25.0"
 
   context    = module.this.context
-  attributes = ["iam", "s3", "read-write"]
+  attributes = ["irsa", "s3-csi", "read-write"]
 }
 
 resource "aws_iam_role" "s3_rw_role" {
@@ -13,11 +13,18 @@ resource "aws_iam_role" "s3_rw_role" {
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "AssumeRoleWithWebIdentity",
         Effect = "Allow",
         Principal = {
-          Service = "eks.amazonaws.com"
+          Federated = "${module.eks.oidc_provider_arn}"
         },
-        Action = "sts:AssumeRole"
+        Action = "sts:AssumeRoleWithWebIdentity",
+        Condition = {
+          StringEquals = {
+            "${module.eks.oidc_provider}:sub" = "system:serviceaccount:${var.s3_csi_namespace}:${var.s3_csi_service_account}",
+            "${module.eks.oidc_provider}:aud" = "sts.amazonaws.com"
+          }
+        }
       }
     ]
   })
@@ -30,9 +37,9 @@ resource "aws_iam_policy" "s3_rw_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid      = "MountpointAllowReadWriteObjects",
-        Effect   = "Allow",
-        Action   = [
+        Sid    = "MountpointAllowReadWriteObjects",
+        Effect = "Allow",
+        Action = [
           "s3:GetObject",
           "s3:PutObject",
           "s3:AbortMultipartUpload",
@@ -41,9 +48,9 @@ resource "aws_iam_policy" "s3_rw_policy" {
         Resource = "${var.s3_csi_bucket_arn}/*"
       },
       {
-        Sid      = "MountpointAllowListBucket",
-        Effect   = "Allow",
-        Action   = [
+        Sid    = "MountpointAllowListBucket",
+        Effect = "Allow",
+        Action = [
           "s3:ListBucket"
         ],
         Resource = "${var.s3_csi_bucket_arn}"

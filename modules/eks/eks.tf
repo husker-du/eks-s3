@@ -24,6 +24,7 @@ module "eks" {
   # which will allow it to deploy resources into the cluster
   enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
   cluster_endpoint_public_access           = var.cluster_public_access
+  enable_irsa                              = var.enable_irsa
 
   vpc_id                   = var.vpc_id
   control_plane_subnet_ids = var.intra_subnet_ids
