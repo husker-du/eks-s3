@@ -9,12 +9,11 @@ spec:
     - ReadWriteMany # Supported options: ReadWriteMany / ReadOnlyMany
   storageClassName: "" # Required for static provisioning
   claimRef: # To ensure no other PVCs can claim this PV
-    namespace: default # Namespace is required even though it's in "default" namespace.
+    namespace: demo # Namespace is required even though it's in "default" namespace.
     name: s3-pvc # Name of your PVC
   mountOptions:
     - allow-delete
     - region eu-west-1
-    - prefix /
   csi:
     driver: s3.csi.aws.com # Required
     volumeHandle: s3-csi-driver-volume # Must be unique

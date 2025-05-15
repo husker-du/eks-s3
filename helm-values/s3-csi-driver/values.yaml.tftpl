@@ -3,4 +3,4 @@ node:
     annotations:
       "eks.amazonaws.com/role-arn": "${csi_driver_role_arn}"
 awsAccessSecret:
-  name: aws-secret
+  name: ${csi_driver_secret_name}

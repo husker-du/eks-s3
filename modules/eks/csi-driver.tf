@@ -8,12 +8,19 @@ resource "helm_release" "s3_csi_driver" {
   wait             = true
 
   values = [templatefile("${var.helm_values_path}/s3-csi-driver/values.yaml.tftpl", {
-    csi_driver_role_arn = aws_iam_role.s3_rw_role.arn
+    csi_driver_role_arn    = aws_iam_role.s3_rw_role.arn
+    csi_driver_secret_name = kubernetes_secret.aws_secret_csi_driver.metadata[0].name
   })]
 
   depends_on = [
     helm_release.karpenter
   ]
+
+  lifecycle {
+    replace_triggered_by = [
+      kubernetes_secret.aws_secret_csi_driver
+    ]
+  }
 }
 
 resource "kubernetes_secret" "aws_secret_csi_driver" {
@@ -28,23 +35,9 @@ resource "kubernetes_secret" "aws_secret_csi_driver" {
   }
 
   depends_on = [
-    helm_release.s3_csi_driver
+    module.eks
   ]
 }
-
-# resource "helm_release" "external_secrets" {
-#   name             = "external-secrets"
-#   repository       = "https://charts.external-secrets.io"
-#   chart            = "external-secrets"
-#   version          = "0.17.0"
-#   namespace        = "external-secrets"
-#   create_namespace = true
-#   wait             = true
-
-#   depends_on = [
-#     helm_release.karpenter
-#   ]
-# }
 
 # resource "helm_release" "hello_kubernetes" {
 #   name             = "hello-kubernetes"
