@@ -1,0 +1,11 @@
+message: "I just deployed this on Kubernetes!"
+
+ingress:
+  configured: true
+  
+service:
+  type: ClusterIP
+  port: 80
+
+deployment:
+  replicaCount: 1

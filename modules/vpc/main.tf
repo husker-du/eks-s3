@@ -60,15 +60,18 @@ module "vpc" {
   private_subnets = local.private_cidrs
   intra_subnets   = local.intra_cidrs
 
+  public_subnet_tags  = module.public_context.tags
+  private_subnet_tags = module.private_context.tags
+  intra_subnet_tags   = module.intra_context.tags
+
+  public_subnet_tags_per_az  = { for az in local.azs : "${az}" => { Name = "${module.public_context.id}-${az}" } }
+  private_subnet_tags_per_az = { for az in local.azs : "${az}" => { Name = "${module.private_context.id}-${az}" } }
+
   enable_nat_gateway   = true
   single_nat_gateway   = true
   create_igw           = true
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  public_subnet_tags  = module.public_context.tags
-  private_subnet_tags = module.private_context.tags
-  intra_subnet_tags   = module.intra_context.tags
 
   tags = module.vpc_context.tags
 }

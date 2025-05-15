@@ -13,7 +13,7 @@ include "root" {
 # Include the envcommon configuration for the component. The envcommon configuration contains settings that are common
 # for the component across all environments.
 include "envcommon" {
-  path = "${dirname(find_in_parent_folders("root.hcl"))}/common/eks.hcl"
+  path = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/eks.hcl"
   # We want to reference the variables from the included config in this configuration, so we expose it.
   expose = true
 }
@@ -36,6 +36,13 @@ dependency "vpc" {
   }
 }
 
+dependency "s3" {
+  config_path = "../s3"
+  mock_outputs = {
+    bucket_arn  = "arn:aws:s3:::s3_bucket_mock123"
+  }
+}
+
 # For production, we want to specify bigger instance classes and storage, so we specify override parameters here. These
 # inputs get merged with the common inputs from the root and the envcommon terragrunt.hcl
 inputs = {
@@ -44,6 +51,9 @@ inputs = {
   public_subnet_ids  = dependency.vpc.outputs.public_subnet_ids
   private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
   intra_subnet_ids   = dependency.vpc.outputs.intra_subnet_ids
+
+  # S3 dependencies
+  s3_csi_bucket_arn  = dependency.s3.outputs.bucket_arn
 
   # EKS cluster
   cluster_version                          = "1.32"
@@ -58,18 +68,4 @@ inputs = {
     max_size       = 3
     desired_size   = 2
   }
-
-  # Karpenter
-  karpenter_version    = "1.3.3"
-  karpenter_wait       = false
-  karpenter_namespace  = "karpenter"
-  karpenter_repository = "oci://public.ecr.aws/karpenter"
-  karpenter_chart      = "karpenter"
-
-  # Mountpoint S3 CSI driver
-  s3_csi_version    = "v1.14.1"
-  s3_csi_wait       = false
-  s3_csi_namespace  = "kube-system"
-  s3_csi_repository = "https://awslabs.github.io/mountpoint-s3-csi-driver"
-  s3_csi_chart      = "aws-mountpoint-s3-csi-driverd"
 }

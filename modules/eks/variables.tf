@@ -22,6 +22,10 @@ variable "intra_subnet_ids" {
   type        = list(string)
 }
 
+variable "s3_csi_bucket_arn" {
+  description = "ARN of the S3 bucket to mount as a filesystem using mountpoint-s3-csi driver"
+  type        = string
+}
 
 #############################################################
 # EKS variables
@@ -175,4 +179,19 @@ variable "s3_csi_version" {
   description = "Version number for mountpoint for S3 CSI driver helm chart"
   type        = string
   default     = "v1.14.1"
+}
+
+#############################################################
+# Helm variables
+#############################################################
+variable "helm_charts_path" {
+  description = "Path of the helm charts"
+  type        = string
+  default     = "./helm-charts"
+}
+
+variable "helm_values_path" {
+  description = "Path of the helm chart values"
+  type        = string
+  default     = "./helm-values"
 }

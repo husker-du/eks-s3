@@ -7,7 +7,7 @@ resource "helm_release" "nginx_ingress" {
   create_namespace = true
   wait             = var.ingress_wait
 
-  values = [file("${path.module}/k8s/nginx-ingress/values.yaml")]
+  values = [file("${var.helm_values_path}/nginx-ingress/values.yaml")]
 
   depends_on = [
     module.eks

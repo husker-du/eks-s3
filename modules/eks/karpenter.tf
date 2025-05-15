@@ -27,7 +27,7 @@ resource "helm_release" "karpenter" {
   wait             = var.karpenter_wait
 
   values = [
-    templatefile("${path.module}/k8s/karpenter/karpenter_values.yaml.tftpl", {
+    templatefile("${var.helm_values_path}/karpenter/values.yaml.tftpl", {
       cluster_name     = module.eks.cluster_name
       cluster_endpoint = module.eks.cluster_endpoint
       queue_name       = module.karpenter.queue_name
