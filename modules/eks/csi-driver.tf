@@ -30,8 +30,8 @@ resource "kubernetes_secret" "aws_secret_csi_driver" {
   }
 
   data = {
-    "key_id"     = var.aws_key_id
-    "access_key" = var.aws_access_key
+    "key_id"     = var.aws_key_id     # Set as environment variable TF_VAR_aws_key_id
+    "access_key" = var.aws_access_key # Set as environment variable TF_VAR_aws_access_key
   }
 
   depends_on = [
