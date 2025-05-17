@@ -11,7 +11,7 @@ ingress:
   annotations:
   className: nginx
   hosts:
-  - host: imageviewer.example.org
+  - host: app.imageviewer.com
     paths:
     - path: /
       pathType: Prefix

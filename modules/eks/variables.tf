@@ -27,16 +27,6 @@ variable "s3_csi_bucket_arn" {
   type        = string
 }
 
-variable "aws_key_id" {
-  description = "The AWS credentials key id for the CSI driver authentication"
-  type        = string
-}
-
-variable "aws_access_key" {
-  description = "The AWS credentials access key for the CSI driver authentication"
-  type        = string
-}
-
 #############################################################
 # EKS variables
 #############################################################

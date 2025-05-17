@@ -12,7 +12,7 @@ install:
 start: install
 	yarn start
 
-.PHONY: build
+.PHONY: install build
 build:
 	@echo "\nBuilding application..."
 	yarn build

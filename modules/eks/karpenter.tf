@@ -1,3 +1,14 @@
+##############################################################
+# Null label contexts
+##############################################################
+module "karpenter_context" {
+  source  = "cloudposse/label/null"
+  version = "0.25.0"
+
+  context    = module.this.context
+  attributes = ["karpenter"]
+}
+
 ################################################################################
 # Karpenter
 ################################################################################
@@ -58,4 +69,32 @@ resource "kubectl_manifest" "karpenter_node_class" {
   depends_on = [
     helm_release.karpenter
   ]
+}
+
+################################################################################
+# Additional security group for karpenter nodes
+################################################################################
+resource "aws_security_group" "allow_system_http" {
+  name        = module.karpenter_context.id
+  description = "Allow HTTP inbound traffic and all outbound traffic from EKS system nodes"
+  vpc_id      = var.vpc_id
+
+  tags = merge(
+      module.eks_context.tags, 
+      { "karpenter.sh/discovery" = var.cluster_name }
+  )
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_system_http" {
+  security_group_id = aws_security_group.allow_system_http.id
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  referenced_security_group_id = module.eks.node_security_group_id
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_system_http" {
+  security_group_id = aws_security_group.allow_system_http.id
+  ip_protocol       = "-1"
+  referenced_security_group_id = module.eks.node_security_group_id
 }

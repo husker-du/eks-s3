@@ -7,7 +7,7 @@ module "eks_context" {
   version = "0.25.0"
 
   context    = module.this.context
-  attributes = ["cluster", "karpenter"]
+  attributes = ["eks", "cluster"]
 }
 
 ################################################################################
