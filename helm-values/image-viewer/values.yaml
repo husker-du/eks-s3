@@ -1,0 +1,42 @@
+image:
+  repository: 241533159018.dkr.ecr.eu-west-1.amazonaws.com/demo-dev-ecr-image-viewer
+  pullPolicy: IfNotPresent
+  tag: 0.1.0
+serviceAccount:
+  create: false
+service:
+  pòrt: 80
+ingress:
+  enabled: true
+  annotations:
+  className: nginx
+  hosts:
+  - host: imageviewer.example.org
+    paths:
+    - path: /
+      pathType: Prefix
+nodeSelector:
+  kubernetes.io/arch: amd64
+volumes:
+  - name: &volumeName persistent-storage
+    persistentVolumeClaim:
+      claimName: &claimName s3-pvc
+volumeMounts:
+  - name: *volumeName
+    mountPath: /data
+persistence:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  storage: 20Gi
+persistentVolume:
+  name: s3-pv
+  storage: 20Gi
+  reclaimPolicy: Retain
+  mountOptions:
+    - allow-delete
+    - region eu-west-1
+  csi:
+    bucketName: demo-dev-s3-csi-images
+persistentVolumeClaim:
+  name: *claimName

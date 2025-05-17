@@ -6,7 +6,7 @@ module "ecr_context" {
   attributes = ["ecr", "image-viewer"]
 }
 
-resource "aws_ecr_repository" "my_app" {
+resource "aws_ecr_repository" "image_viewer" {
   name                 = module.ecr_context.id
   image_tag_mutability = var.tag_mutability
 
